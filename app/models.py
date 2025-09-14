@@ -7,7 +7,9 @@ class User(SQLModel, table=True):
     username: str
     email: str
     password_hash: str
-    role: str = "customer"  # or "admin"
+    role: str = Field(default="customer")
+    address: Optional[str] = None
+    phone: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Product(SQLModel, table=True):
@@ -39,3 +41,4 @@ class Notification(SQLModel, table=True):
     type: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
     read: bool = Field(default=False)
+
