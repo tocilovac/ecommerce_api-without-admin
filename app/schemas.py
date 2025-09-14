@@ -67,4 +67,8 @@ class ProductUpdate(SQLModel):
     category: Optional[str] = None
     image_url: Optional[str] = None
 
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+
 

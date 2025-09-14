@@ -4,10 +4,11 @@ from app.database import get_session
 from app.models import Product
 from app.schemas import ProductCreate, ProductRead, ProductUpdate
 from app.cache import get_cached_products, set_cached_products
+from app.dependencies import require_admin
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-@router.post("/", response_model=ProductRead)
+@router.post("/", response_model=ProductRead, dependencies=[Depends(require_admin)])
 def create_product(product: ProductCreate, session: Session = Depends(get_session)):
     new_product = Product(**product.dict())
     session.add(new_product)
@@ -32,7 +33,7 @@ def get_product(product_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@router.put("/{product_id}", response_model=ProductRead)
+@router.put("/{product_id}", response_model=ProductRead, dependencies=[Depends(require_admin)])
 def update_product(product_id: int, product_update: ProductUpdate, session: Session = Depends(get_session)):
     product = session.get(Product, product_id)
     if not product:
@@ -47,7 +48,7 @@ def update_product(product_id: int, product_update: ProductUpdate, session: Sess
     session.refresh(product)
     return product
 
-@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_admin)])
 def delete_product(product_id: int, session: Session = Depends(get_session)):
     product = session.get(Product, product_id)
     if not product:
