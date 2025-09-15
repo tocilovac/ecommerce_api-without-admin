@@ -5,9 +5,6 @@ from app.routes import users, cart, orders
 from app.routes.products import router as products_router
 from app.routes.admin import router as admin_router
 
-# Define the OAuth2 scheme for Swagger
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/login")  # or "/users/login" if you prefer
-
 app = FastAPI(
     title="E-Commerce API",
     description="API for managing users, products, orders, and carts with role-based access.",
