@@ -5,7 +5,7 @@ from app.models import User
 from app.schemas import UserCreate, UserLogin, UserRead
 from app.auth import hash_password, verify_password, create_access_token
 from app.crud import get_user_by_email
-
+from app.dependencies import require_admin  # ✅ Added for admin protection
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -44,5 +44,19 @@ def login(credentials: UserLogin, session: Session = Depends(get_session)):
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    token = create_access_token({"sub": str(user.id), "role": user.role})
+    token = create_access_token({
+        "sub": str(user.id),
+        "username": user.username,
+        "role": user.role
+    })
     return {"access_token": token, "token_type": "bearer"}
+
+
+# ✅ Admin-only user deletion
+@router.delete("/{user_id}", status_code=204, dependencies=[Depends(require_admin)])
+def delete_user(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    session.delete(user)
+    session.commit()
