@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from fastapi.security import OAuth2PasswordBearer
 from app.database import init_db
-from app.routes import users, cart, orders
-from app.routes.products import router as products_router
 from app.routes.admin import router as admin_router
+from app.routes.cart import router as cart_router
+from app.routes.orders import router as orders_router
+from app.routes.products import router as products_router
+from app.routes.users import router as users_router
 
 app = FastAPI(
     title="E-Commerce API",
@@ -11,11 +12,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Initialize database
 init_db()
 
-# Include routers
-app.include_router(users.router)
-app.include_router(cart.router)
-app.include_router(orders.router)
-app.include_router(products_router, prefix="/products", tags=["products"])
+# Register routers
 app.include_router(admin_router)
+app.include_router(cart_router)
+app.include_router(orders_router)
+app.include_router(products_router)
+app.include_router(users_router)

@@ -1,22 +1,30 @@
 # Python
 __pycache__/
 *.py[cod]
-*.env
 *.sqlite3
-
-# VS Code
-.vscode/
-
-# Docker
 *.log
-*.db
-.env
-docker-compose.override.yml
 
-# OS
+# Virtual environment
+venv/
+env/
+
+# OS files
 .DS_Store
 Thumbs.db
 
-# IDEs
+# IDE/editor configs
+.vscode/
 .idea/
-*.iml
+
+# Bytecode and build
+*.egg-info/
+dist/
+build/
+
+# Cache
+*.cache
+*.pkl
+*.db
+
+# Environment variables
+.env
