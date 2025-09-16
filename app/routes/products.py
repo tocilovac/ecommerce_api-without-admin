@@ -14,21 +14,21 @@ from app.services.products_service import (
 router = APIRouter(prefix="/products", tags=["products"])
 
 @router.post("/", response_model=ProductRead, dependencies=[Depends(require_admin)])
-def create_product_route(product: ProductCreate, session: Session = Depends(get_session)):
+def create_product(product: ProductCreate, session: Session = Depends(get_session)):
     return create_product(product, session)
 
 @router.get("/", response_model=list[ProductRead])
-def list_products_route(session: Session = Depends(get_session)):
+def list_products(session: Session = Depends(get_session)):
     return list_products(session)
 
 @router.get("/{product_id}", response_model=ProductRead)
-def get_product_route(product_id: int, session: Session = Depends(get_session)):
+def get_product(product_id: int, session: Session = Depends(get_session)):
     return get_product_by_id(product_id, session)
 
 @router.put("/{product_id}", response_model=ProductRead, dependencies=[Depends(require_admin)])
-def update_product_route(product_id: int, product_update: ProductUpdate, session: Session = Depends(get_session)):
+def update_product(product_id: int, product_update: ProductUpdate, session: Session = Depends(get_session)):
     return update_product(product_id, product_update, session)
 
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_admin)])
-def delete_product_route(product_id: int, session: Session = Depends(get_session)):
+def delete_product(product_id: int, session: Session = Depends(get_session)):
     return delete_product(product_id, session)
